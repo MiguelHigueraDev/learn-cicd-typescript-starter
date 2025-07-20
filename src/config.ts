@@ -17,7 +17,7 @@ type DBConfig = {
 
 export const config: Config = {
   api: {
-    port: process.env.PORT,
+    port: "8080",
     filepathRoot: "./src/assets",
   },
   db: {
