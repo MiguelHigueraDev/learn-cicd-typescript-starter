@@ -9,6 +9,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -32,6 +35,9 @@ jobs:
 
       - name: Build Docker image and push to GAR
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/notely-466515/notely-ar-repo/learn-cicd-typescript-starter:latest .
+
+      - name: "Run migrations"
+        run: npm run db:migrate
 
       - name: "Deploy to Cloud Run"
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/notely-466515/notely-ar-repo/learn-cicd-typescript-starter:latest --region us-central1 --allow-unauthenticated --project notely-466515 --max-instances=4
